@@ -6,17 +6,8 @@
     <body>
 
     <?php
-    $servername = "localhost";
-    $username = "root";
-    $dbname = "es_comande_Aluisi";
-
-// Create connection
-    $conn = new mysqli($servername, $username,"", $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+   
+   include('database.php');
 
 echo "<br>";
 
@@ -70,6 +61,11 @@ echo "<br>";
       }
 
       echo "</table>";
+
+      echo "<form action='comanda.php'>";
+      echo "<button type='submit'>nuova comanda</button>";
+      echo "</form>";
+
       $conn->close();
 
 ?>
