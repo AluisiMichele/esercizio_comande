@@ -12,7 +12,7 @@
 echo "<br>";
 
     echo "<form method='POST'>";
-      echo "<select id='tipologie' name='filtro' id='filtComande'>";
+      echo "<select name='filtro' id='filtComande'>";
 
         echo"<option value='tutte'>tutte</option>";
         echo"<option value='attivosi'>attive</option>";
@@ -43,7 +43,7 @@ echo "<br>";
 
 
     if ($result->num_rows > 0) {
-        // output data of each row
+        
         while($row = $result->fetch_assoc()) {
           echo "<tr>";
           echo "<td>{$row['ID_comanda']}</td>"; 
@@ -56,10 +56,8 @@ echo "<br>";
           echo "</tr>";
         
         }
-      } else {
-        echo "0 results";
-      }
-
+      };
+      
       echo "</table>";
 
       echo "<form action='comanda.php'>";
