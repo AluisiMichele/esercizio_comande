@@ -1,0 +1,32 @@
+
+body{
+
+display:flex;
+align-items: center;
+align-content: center;
+justify-content: center;
+border:solid 10px black;
+
+}
+
+button{
+
+
+border-radius: 15px;
+background-color: #8EB4E0;
+color: white;
+text-transform: uppercase;
+font-weight: bold;
+
+}
+
+input{
+
+
+    border-radius: 15px;
+    background-color: #8EB4E0;
+    color:white;
+    text-transform: uppercase;
+    font-weight: bold;
+    
+    }

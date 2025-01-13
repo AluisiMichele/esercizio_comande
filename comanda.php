@@ -1,7 +1,9 @@
-<DOCTYPE html>
+  <DOCTYPE html>
     <html>
 
-    <head></head>
+    <head>
+    <link rel="stylesheet" href="style.css">
+    </head>
 
     <body>
 
@@ -59,7 +61,7 @@
 
       echo "<div>";
 
-
+      
 
       echo "</div>";
 
