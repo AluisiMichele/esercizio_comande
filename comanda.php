@@ -11,8 +11,6 @@
 
     include('database.php');
 
-    
-
     echo "<form action='index.php'>";
     echo "<button>annulla</button>";
     echo "</form>";
@@ -32,7 +30,7 @@
 
     $filtro = isset($_POST['filtro']) ? $_POST['filtro'] : 'antipasti';
 
-    $sql = "SELECT * FROM menu";
+    $sql = "SELECT ID_menu, Descrizione_piatto, costo, prezzo FROM menu";
       if ($filtro == 'antipasti') {
         
         $sql .= " WHERE ID_tipologia = 1";
@@ -52,8 +50,11 @@
         
         while($row = $result->fetch_assoc()) {
           
-        echo "<form method='POST'>";
-          echo "<input type='submit' name='selez_piatto' value='{$row['Descrizione piatto']}'>"; 
+        echo "<form method='POST' action='insert_comanda.php'>";
+          echo "<input type='submit' name='selez_piatto' value='{$row['Descrizione_piatto']}'>"; 
+          echo "<input hidden type='text' name='ID_menu' value='{$row['ID_menu']}'>";
+          echo "<input hidden type='text' name='costo' value='{$row['costo']}'>"; 
+          echo "<input hidden type='text' name='prezzo' value='{$row['prezzo']}'>"; 
         echo "</form><br><br>";
       
          }
