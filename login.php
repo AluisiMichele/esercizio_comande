@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         $_SESSION['nome'] = $row['Nome'];
         $_SESSION['username'] = $row['username'];
         $_SESSION['last_activity'] = time(); 
-
+        
         header("Location: comande.php");
         exit();
     } 
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
    echo "<p>Nome utente</p>";
     echo "<input type='text' name='nome_utente' value=''>";
     echo "<p>Password</p>";
-    echo "<input type=password name='password' value=''>";
+    echo "<input type=text name='password' value=''>";
     echo "<br><br><input type=submit>";
 
    echo "</form>";
