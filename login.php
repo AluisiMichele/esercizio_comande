@@ -1,5 +1,5 @@
 
-<DOCTYPE html>
+<!DOCTYPE html>
     <html>
 
     <head>
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         $_SESSION['username'] = $row['username'];
         $_SESSION['last_activity'] = time(); 
         
-        header("Location: comande.php");
+        header("Location: index.php");
         exit();
     } 
     else 

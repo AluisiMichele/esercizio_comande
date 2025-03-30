@@ -1,30 +1,77 @@
 
-body{
-
-display:flex;
-align-items: center;
-align-content: center;
-justify-content: center;
-border:solid 10px black;
-
-}
-
-button{
-
-
-border-radius: 15px;
-background-color: #8EB4E0;
-color: white;
-font-weight: bold;
-
-}
-
-input{
-
-
-    border-radius: 15px;
-    background-color: #8EB4E0;
-    color:white;
-    font-weight: bold;
-    
-    }
+body {
+    font-family: Arial, sans-serif; 
+    margin: 20px; 
+    background-color: #f9f9f9; 
+    color: #333; 
+  }
+  
+  /* Stile per i form */
+  form {
+    margin-bottom: 20px; 
+  }
+  
+  form p {
+    font-weight: bold; 
+    margin: 5px 0; 
+  }
+  
+  input[type="text"], input[type="password"], select {
+    width: 100%; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+  }
+  
+  input[type="submit"], button {
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    margin: 10px;
+  }
+  
+  input[type="submit"]:hover, button:hover {
+    background-color: #45a049; 
+  }
+  
+  /* Stile per le tabelle */
+  table {
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 20px; 
+  }
+  
+  table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px; 
+    text-align: left; 
+  }
+  
+  table th {
+    background-color: #4CAF50; 
+    color: white; 
+  }
+  
+  /* Messaggi di errore */
+  p[style*="color: red;"] {
+    font-weight: bold; 
+    color: #ff0000; 
+  }
+  
+  /* Stile per il pulsante "nuova comanda" */
+  button {
+    background-color: #007BFF;
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+  }
+  
+  button:hover {
+    background-color: #0056b3; 
+  }

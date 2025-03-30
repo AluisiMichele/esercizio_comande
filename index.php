@@ -62,7 +62,7 @@ echo "<br>";
       
       echo "</table>";
 
-      echo "<form action='comanda.php'>";
+      echo "<form action='tavoli.php'>";
       echo "<button type='submit'>nuova comanda</button>";
       echo "</form>";
 
