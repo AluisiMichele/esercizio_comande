@@ -21,7 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
     $username = $_POST['nome_utente'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM camerieri WHERE username = ? AND pass_id = ?";
+    $sql = "SELECT * FROM camerieri WHERE username = ? AND pass_id = SHA2(256,?)";
+
     $query = $conn->prepare($sql);
     $query->bind_param("ss", $username, $password);
     $query->execute();
