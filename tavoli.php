@@ -18,7 +18,7 @@
 
     echo "<p>SELEZIONA IL TAVOLO</p><br>";
 
-    echo "<form action = 'comanda.php'>";  
+    echo "<form method ='GET' action = 'comanda.php'>";  
 
             echo "<input type='submit' name = 'Id_tavolo' value='1'><br>";
             echo "<input type='submit' name = 'Id_tavolo' value='2'><br>";

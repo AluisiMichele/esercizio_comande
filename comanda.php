@@ -11,9 +11,11 @@
 
     include('database.php');
 
-    $sql = "INSERT INTO comande (N_tavolo, stato)
-     VALUES (" . $_GET['Id_tavolo'] . ", 1)";
+    $sql2 = "INSERT INTO comande (N_tavolo, stato) 
+              VALUES (" . $_GET['Id_tavolo'] . ", 1)";
 
+              $conn->query($sql2);
+ 
     echo "<form action='tavoli.php'>";
     echo "<button>annulla</button>";
     echo "</form>";
