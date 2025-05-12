@@ -11,10 +11,10 @@
 
     include('database.php');
 
-    $sql2 = "INSERT INTO comande (N_tavolo, stato) 
-              VALUES (" . $_GET['Id_tavolo'] . ", 1)";
-
-              $conn->query($sql2);
+    if (isset($_POST['Id_tavolo'])) 
+    { $sql2 = "INSERT INTO comande (N_tavolo, stato) VALUES (" . $_POST['Id_tavolo'] . ", 1)";
+      $conn->query($sql2);
+    }
  
     echo "<form action='tavoli.php'>";
     echo "<button>annulla</button>";
@@ -33,7 +33,7 @@
         echo "</select>";
     echo"</form>";
 
-    $filtro = isset($_POST['filtro']) ? $_POST['filtro'] : 'antipasti';
+    $filtro = isset($_POST['filtro']) ? $_POST['filtro'] : '';
 
     $sql = "SELECT ID_menu, Descrizione_piatto, costo, prezzo FROM menu";
       if ($filtro == 'antipasti') {
