@@ -22,7 +22,7 @@ echo "<br>";
     
       echo "</select>";
 
-      echo "<input type='submit' value='filtra'>";
+      echo "<input type='submit' value='filtra'>"; 
     echo"</form>";
 
     echo "<table border ='1'>";

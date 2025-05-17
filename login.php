@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
    echo "<p>Nome utente</p>";
     echo "<input type='text' name='nome_utente' value=''>";
     echo "<p>Password</p>";
-    echo "<input type=text name='password' value=''>";
+    echo "<input type=password name='password' value=''>";
     echo "<br><br><input type=submit>";
 
    echo "</form>";

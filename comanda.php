@@ -7,19 +7,45 @@
 
     <body>
 
-    <?php
-
+<?php
+    session_start();
     include('database.php');
 
     if (isset($_POST['Id_tavolo'])) 
-    { $sql2 = "INSERT INTO comande (N_tavolo, stato) VALUES (" . $_POST['Id_tavolo'] . ", 1)";
-      $conn->query($sql2);
+    { 
+        // Data e ora correnti
+        $data_corrente = date("Y-m-d");
+        $ora_corrente = date("H:i:s");
+        
+        // ID cameriere (potresti voler recuperare questo dall'utente loggato)
+        $id_cameriere = isset($_SESSION['id_cameriere']) ? $_SESSION['id_cameriere'] : 1;
+        
+        // Numero di coperti (predefinito o da form)
+        $n_coperti = isset($_POST['n_coperti']) ? $_POST['n_coperti'] : 2;
+        
+        $sql2 = "INSERT INTO comande (N_tavolo, stato, data, ora, N_coperti, ID_cameriere) 
+                VALUES (" . $_POST['Id_tavolo'] . ", 1, '$data_corrente', '$ora_corrente', $n_coperti, $id_cameriere)";
+        
+        if ($conn->query($sql2) === TRUE) {
+            // Ottieni l'ID della comanda appena creata
+            $_SESSION['id_comanda'] = $conn->insert_id;
+            $_SESSION['n_tavolo'] = $_POST['Id_tavolo'];
+        } else {
+            echo "Errore nella creazione della comanda: " . $conn->error;
+        }
     }
  
     echo "<form action='tavoli.php'>";
     echo "<button>annulla</button>";
     echo "</form>";
     echo "<br>";
+    
+    // Mostra informazioni sulla comanda corrente
+    if (isset($_SESSION['id_comanda'])) {
+        echo "<div class='comanda-info'>";
+        echo "<p><strong>Comanda #" . $_SESSION['id_comanda'] . " - Tavolo " . $_SESSION['n_tavolo'] . "</strong></p>";
+        echo "</div>";
+    }
 
     echo "<form method='POST'>";  
         echo "<select name='filtro' id='piatti' >";
@@ -66,12 +92,47 @@
       };
 
       echo "<div>";
-
       
+      // Mostra i piatti già aggiunti alla comanda corrente
+      if (isset($_SESSION['id_comanda'])) {
+          $id_comanda = $_SESSION['id_comanda'];
+          
+          echo "<h3>Piatti ordinati:</h3>";
+          
+          $sql_dettagli = "SELECT d.ID_dettaglio, m.Descrizione_piatto, d.prezzo 
+                          FROM dettagli_comande d 
+                          JOIN menu m ON d.ID_menu = m.ID_menu 
+                          WHERE d.ID_comanda = $id_comanda";
+                          
+          $result_dettagli = $conn->query($sql_dettagli);
+          
+          if ($result_dettagli && $result_dettagli->num_rows > 0) {
+              echo "<table border='1'>";
+              echo "<tr><th>Piatto</th><th>Prezzo</th></tr>";
+              
+              $totale = 0;
+              
+              while($row_dettaglio = $result_dettagli->fetch_assoc()) {
+                  echo "<tr>";
+                  echo "<td>{$row_dettaglio['Descrizione_piatto']}</td>";
+                  echo "<td>{$row_dettaglio['prezzo']} €</td>";
+                  echo "</tr>";
+                  
+                  $totale += $row_dettaglio['prezzo'];
+              }
+              
+              echo "<tr><td><strong>Totale</strong></td><td><strong>{$totale} €</strong></td></tr>";
+              echo "</table>";
+          } else {
+              echo "<p>Nessun piatto ordinato.</p>";
+          }
+      }
 
       echo "</div>";
 
+      echo "<form action='conferma_comanda.php' method='POST'>";
       echo "<input type='submit' name='comanda' value='conferma comanda'>";
+      echo "</form>";
       
       $conn->close();
 ?>
