@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         $_SESSION['login'] = "OK";
         $_SESSION['nome_utente'] = $row['username'];
         $_SESSION['password'] = $row['pass_id'];
+        $_SESSION['id_cameriere'] = $row['ID_cameriere'];
         $_SESSION['last_activity'] = time(); 
         
         header("Location: index.php");
