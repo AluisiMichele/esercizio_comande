@@ -11,6 +11,8 @@
    
    include('database.php');
 
+   echo"<a href = 'logout.php'> Logout </a><br>";
+
 echo "<br>";
 
     echo "<form method='POST'>";

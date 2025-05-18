@@ -17,10 +17,10 @@
         $data_corrente = date("Y-m-d");
         $ora_corrente = date("H:i:s");
         
-        // ID cameriere (potresti voler recuperare questo dall'utente loggato)
+        // ID cameriere 
         $id_cameriere = isset($_SESSION['id_cameriere']) ? $_SESSION['id_cameriere'] : 1;
         
-        // Numero di coperti (predefinito o da form)
+        // Numero di coperti 
         $n_coperti = isset($_POST['n_coperti']) ? $_POST['n_coperti'] : 2;
         
         $sql2 = "INSERT INTO comande (N_tavolo, stato, data, ora, N_coperti, ID_cameriere) 
