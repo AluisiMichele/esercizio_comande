@@ -1,7 +1,7 @@
 <?php
-session_start(); //richiesto per accedere alla sessione attuale
+session_start(); 
 session_unset(); //rimozione variabili delle sessioni
-session_destroy(); //distruzione dati associati alla sessione corrente
+session_destroy(); //distruzione dati della sessione corrente
 header("Location: login.php"); 
 exit();
 ?>

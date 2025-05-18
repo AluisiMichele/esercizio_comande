@@ -81,11 +81,17 @@
         
         while($row = $result->fetch_assoc()) {
           
-        echo "<form method='POST' action='insert_comanda.php'>";
-          echo "<input type='submit' name='selez_piatto' value='{$row['Descrizione_piatto']}'>"; 
-          echo "<input hidden type='text' name='ID_menu' value='{$row['ID_menu']}'>";
-          echo "<input hidden type='text' name='costo' value='{$row['costo']}'>"; 
-          echo "<input hidden type='text' name='prezzo' value='{$row['prezzo']}'>"; 
+        echo "<form method='POST' action='insert_comanda.php' class='piatto-form'>";
+          echo "<div class='piatto-container'>";
+            echo "<input type='submit' name='selez_piatto' value='{$row['Descrizione_piatto']}'>";
+            echo "<div class='quantity-control'>";
+              echo "<label for='quantita_{$row['ID_menu']}'>Quantità:</label>";
+              echo "<input type='number' id='quantita_{$row['ID_menu']}' name='quantita' value='1' min='1' max='10'>";
+            echo "</div>";
+          echo "</div>";
+          echo "<input type='hidden' name='ID_menu' value='{$row['ID_menu']}'>";
+          echo "<input type='hidden' name='costo' value='{$row['costo']}'>";
+          echo "<input type='hidden' name='prezzo' value='{$row['prezzo']}'>";
         echo "</form><br><br>";
       
          }
@@ -99,7 +105,7 @@
           
           echo "<h3>Piatti ordinati:</h3>";
           
-          $sql_dettagli = "SELECT d.ID_dettaglio, m.Descrizione_piatto, d.prezzo 
+          $sql_dettagli = "SELECT d.ID_dettaglio, m.Descrizione_piatto, d.quantità, d.prezzo, (d.prezzo * d.quantità) as totale_piatto 
                           FROM dettagli_comande d 
                           JOIN menu m ON d.ID_menu = m.ID_menu 
                           WHERE d.ID_comanda = $id_comanda";
@@ -108,20 +114,22 @@
           
           if ($result_dettagli && $result_dettagli->num_rows > 0) {
               echo "<table border='1'>";
-              echo "<tr><th>Piatto</th><th>Prezzo</th></tr>";
+              echo "<tr><th>Piatto</th><th>Quantità</th><th>Prezzo Unitario</th><th>Totale</th></tr>";
               
               $totale = 0;
               
               while($row_dettaglio = $result_dettagli->fetch_assoc()) {
                   echo "<tr>";
                   echo "<td>{$row_dettaglio['Descrizione_piatto']}</td>";
+                  echo "<td>{$row_dettaglio['quantità']}</td>";
                   echo "<td>{$row_dettaglio['prezzo']} €</td>";
+                  echo "<td>{$row_dettaglio['totale_piatto']} €</td>";
                   echo "</tr>";
                   
-                  $totale += $row_dettaglio['prezzo'];
+                  $totale += $row_dettaglio['totale_piatto'];
               }
               
-              echo "<tr><td><strong>Totale</strong></td><td><strong>{$totale} €</strong></td></tr>";
+              echo "<tr><td colspan='3'><strong>Totale</strong></td><td><strong>{$totale} €</strong></td></tr>";
               echo "</table>";
           } else {
               echo "<p>Nessun piatto ordinato.</p>";
