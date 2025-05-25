@@ -2,60 +2,52 @@
     session_start();
     include('database.php');
 
-    // Ottieni l'ID della comanda dalla sessione
-    $id_comanda = isset($_SESSION['id_comanda']) ? $_SESSION['id_comanda'] : 0;
-    
-    if ($id_comanda <= 0) {
-        echo "Errore: Nessuna comanda attiva.";
-        echo "<br><a href='tavoli.php'>Torna alla selezione tavoli</a>";
-        exit();
+    // Inizializza l'array dei piatti temporanei se non esiste
+    if (!isset($_SESSION['piatti_temporanei'])) {
+        $_SESSION['piatti_temporanei'] = array();
     }
-    
+
     // Ottieni la quantità dei piatti, con valore predefinito 1 se non specificato
     $quantita = isset($_POST['quantita']) ? intval($_POST['quantita']) : 1;
     
     // Assicurati che la quantità sia almeno 1
     if ($quantita < 1) $quantita = 1;
+
+    // Ottieni i dati del piatto dal menu
+    $id_menu = $_POST['ID_menu'];
+    $sql_menu = "SELECT Descrizione_piatto FROM menu WHERE ID_menu = $id_menu";
+    $result_menu = $conn->query($sql_menu);
     
-    // Calcola il prezzo totale in base alla quantità
-    $prezzo_totale = $_POST['prezzo'] * $quantita;
-    $costo_totale = $_POST['costo'] * $quantita;
-    
-    // Controlla se esiste già questo piatto nella comanda
-    $check_sql = "SELECT ID_dettaglio, quantità FROM dettagli_comande 
-                 WHERE ID_menu = " . $_POST['ID_menu'] . " AND ID_comanda = " . $id_comanda;
-    
-    $check_result = $conn->query($check_sql);
-    
-    if ($check_result && $check_result->num_rows > 0) {
-        // Il piatto esiste già, aggiorna la quantità
-        $row = $check_result->fetch_assoc();
-        $nuova_quantita = $row['quantità'] + $quantita;
+    if ($result_menu && $result_menu->num_rows > 0) {
+        $row_menu = $result_menu->fetch_assoc();
+        $descrizione_piatto = $row_menu['Descrizione_piatto'];
         
-        $update_sql = "UPDATE dettagli_comande 
-                      SET quantità = " . $nuova_quantita . " 
-                      WHERE ID_dettaglio = " . $row['ID_dettaglio'];
-        
-        if ($conn->query($update_sql) === TRUE) {
-            // Reindirizza l'utente alla pagina precedente
-            header("Location: comanda.php");
-            exit();
-        } else {
-            echo "Errore durante l'aggiornamento: " . $conn->error;
+        // Controlla se il piatto esiste già nell'array temporaneo
+        $piatto_esistente = false;
+        foreach ($_SESSION['piatti_temporanei'] as $key => $piatto) {
+            if ($piatto['id_menu'] == $id_menu) {
+                // Aggiorna la quantità del piatto esistente
+                $_SESSION['piatti_temporanei'][$key]['quantita'] += $quantita;
+                $piatto_esistente = true;
+                break;
+            }
         }
-    } else {
-        // Il piatto non esiste, inserisci nuovo record
-        $sql = "INSERT INTO dettagli_comande (ID_menu, prezzo, costo, ID_comanda, quantità)
-                VALUES (" . $_POST['ID_menu'] . ", " . $_POST['prezzo'] . ", " . $_POST['costo'] . ", " . $id_comanda . ", " . $quantita . ")";
         
-        if ($conn->query($sql) === TRUE) {
-            // Reindirizza l'utente alla pagina precedente
-            header("Location: comanda.php");
-            exit();
-        } else {
-            echo "Errore durante l'inserimento: " . $conn->error;
+        // Se il piatto non esiste, aggiungilo all'array
+        if (!$piatto_esistente) {
+            $_SESSION['piatti_temporanei'][] = array(
+                'id_menu' => $id_menu,
+                'descrizione' => $descrizione_piatto,
+                'quantita' => $quantita,
+                'prezzo' => $_POST['prezzo'],
+                'costo' => $_POST['costo']
+            );
         }
     }
+
+    // Reindirizza alla pagina comanda
+    header("Location: comanda.php");
+    exit();
 
     $conn->close();
 ?>

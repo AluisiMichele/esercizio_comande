@@ -15,7 +15,7 @@ body {
     margin: 5px 0; 
   }
   
-  input[type="text"], input[type="password"], select {
+  input[type="text"], input[type="password"], input[type="number"], select {
     width: 100%; 
     padding: 10px; 
     margin-bottom: 10px; 
@@ -87,7 +87,7 @@ body {
     display: flex;
     align-items: center;
   }
-  
+   
   .quantity-control label {
     margin-right: 5px;
   }
@@ -107,4 +107,57 @@ body {
   table tr:last-child {
     font-weight: bold;
     background-color: #f2f2f2;
+  }
+
+  /* Sezione coperti */
+  .coperti-section {
+    background-color: #e8f4fd;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 2px solid #4CAF50;
+  }
+
+  .coperti-section h3 {
+    color: #2c5aa0;
+    margin-top: 0;
+  }
+
+  .coperti-section label {
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+
+  .coperti-section input[type="number"] {
+    width: 80px;
+    padding: 8px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .coperti-section input[type="submit"] {
+    background-color: #28a745;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .coperti-section input[type="submit"]:hover {
+    background-color: #218838;
+  }
+
+  /* Info comanda */
+  .comanda-info {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+
+  .comanda-info p {
+    margin: 0;
+    color: #856404;
   }

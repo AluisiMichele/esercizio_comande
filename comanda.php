@@ -7,6 +7,15 @@
 
     <body>
 
+<DOCTYPE html>
+    <html>
+
+    <head>
+    <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+
 <?php
     session_start();
     include('database.php');
@@ -20,19 +29,12 @@
         // ID cameriere 
         $id_cameriere = isset($_SESSION['id_cameriere']) ? $_SESSION['id_cameriere'] : 1;
         
-        // Numero di coperti 
-        $n_coperti = isset($_POST['n_coperti']) ? $_POST['n_coperti'] : 2;
-        
-        $sql2 = "INSERT INTO comande (N_tavolo, stato, data, ora, N_coperti, ID_cameriere) 
-                VALUES (" . $_POST['Id_tavolo'] . ", 1, '$data_corrente', '$ora_corrente', $n_coperti, $id_cameriere)";
-        
-        if ($conn->query($sql2) === TRUE) {
-            // Ottieni l'ID della comanda appena creata
-            $_SESSION['id_comanda'] = $conn->insert_id;
-            $_SESSION['n_tavolo'] = $_POST['Id_tavolo'];
-        } else {
-            echo "Errore nella creazione della comanda: " . $conn->error;
-        }
+        // RIMUOVIAMO L'INSERIMENTO AUTOMATICO DELLA COMANDA
+        // Salviamo solo le informazioni temporanee in sessione
+        $_SESSION['temp_tavolo'] = $_POST['Id_tavolo'];
+        $_SESSION['temp_data'] = $data_corrente;
+        $_SESSION['temp_ora'] = $ora_corrente;
+        $_SESSION['temp_cameriere'] = $id_cameriere;
     }
  
     echo "<form action='tavoli.php'>";
@@ -44,6 +46,10 @@
     if (isset($_SESSION['id_comanda'])) {
         echo "<div class='comanda-info'>";
         echo "<p><strong>Comanda #" . $_SESSION['id_comanda'] . " - Tavolo " . $_SESSION['n_tavolo'] . "</strong></p>";
+        echo "</div>";
+    } elseif (isset($_SESSION['temp_tavolo'])) {
+        echo "<div class='comanda-info'>";
+        echo "<p><strong>Preparazione comanda - Tavolo " . $_SESSION['temp_tavolo'] . "</strong></p>";
         echo "</div>";
     }
 
@@ -100,7 +106,28 @@
       echo "<div>";
       
       // Mostra i piatti già aggiunti alla comanda corrente
-      if (isset($_SESSION['id_comanda'])) {
+      if (isset($_SESSION['piatti_temporanei']) && !empty($_SESSION['piatti_temporanei'])) {
+          echo "<h3>Piatti ordinati:</h3>";
+          echo "<table border='1'>";
+          echo "<tr><th>Piatto</th><th>Quantità</th><th>Prezzo Unitario</th><th>Totale</th></tr>";
+          
+          $totale = 0;
+          
+          foreach ($_SESSION['piatti_temporanei'] as $piatto) {
+              $totale_piatto = $piatto['prezzo'] * $piatto['quantita'];
+              echo "<tr>";
+              echo "<td>{$piatto['descrizione']}</td>";
+              echo "<td>{$piatto['quantita']}</td>";
+              echo "<td>{$piatto['prezzo']} €</td>";
+              echo "<td>{$totale_piatto} €</td>";
+              echo "</tr>";
+              
+              $totale += $totale_piatto;
+          }
+          
+          echo "<tr><td colspan='3'><strong>Totale</strong></td><td><strong>{$totale} €</strong></td></tr>";
+          echo "</table>";
+      } elseif (isset($_SESSION['id_comanda'])) {
           $id_comanda = $_SESSION['id_comanda'];
           
           echo "<h3>Piatti ordinati:</h3>";
@@ -134,17 +161,34 @@
           } else {
               echo "<p>Nessun piatto ordinato.</p>";
           }
+      } else {
+          echo "<p>Nessun piatto ordinato.</p>";
       }
 
       echo "</div>";
 
-      echo "<form action='conferma_comanda.php' method='POST'>";
-      echo "<input type='submit' name='comanda' value='conferma comanda'>";
-      echo "</form>";
+      // Mostra il form per il numero di coperti e conferma solo se ci sono piatti
+      if ((isset($_SESSION['piatti_temporanei']) && !empty($_SESSION['piatti_temporanei'])) || 
+          (isset($_SESSION['id_comanda']))) {
+          
+          echo "<div class='coperti-section'>";
+          echo "<h3>Finalizza Comanda</h3>";
+          echo "<form action='conferma_comanda.php' method='POST'>";
+          echo "<label for='n_coperti'>Numero di coperti:</label>";
+          echo "<input type='number' id='n_coperti' name='n_coperti' value='2' min='1' max='20' required>";
+          echo "<br><br>";
+          echo "<input type='submit' name='comanda' value='Conferma Comanda'>";
+          echo "</form>";
+          echo "</div>";
+      }
       
       $conn->close();
 ?>
 
+
+    </body>
+
+    </html>
 
     </body>
 
